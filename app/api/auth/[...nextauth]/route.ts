@@ -2,9 +2,9 @@ import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-
-const authOptions: AuthOptions = {
-
+//Specifying the configuration for authentication
+export const authOptions: AuthOptions = {
+//Configures authentication providers
     providers:[
     
     GitHubProvider({
@@ -17,14 +17,15 @@ const authOptions: AuthOptions = {
     })
 
     ],
+    //Configures custom pages for authentication
     pages:{
         signIn:"/sign-in",
     },
-    
+    //securing the authentication process
     secret: process.env.NEXTAUTH_SECRET,
 
 }
-
+//handler represents the authentication endpoint
 const handler = NextAuth(authOptions);
 
 export {handler as GET, handler as POST}
