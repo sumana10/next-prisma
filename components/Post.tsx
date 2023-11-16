@@ -1,44 +1,60 @@
 import Image from "next/image";
 import Link from "next/link";
 import DeleteButton from "./DeleteButton";
-
+import {getServerSession} from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface PostProps {
-    id: string,
-    author: string,
-    datepublished: string,
-    thumbnail?: string,
-    authorEmail?: string,
-    title: string,
-    content: string,
-    links?: string[],
-    category: string;
-}
-export default function Post(
+    id: string;
+    author: {
+      name: string;
+    };
+    createdAt: string;
+    thumbnail?: string;
+    authorEmail?: string;
+    title: string;
+    content: string;
+    links?: string[] | null;
+    catName?: string | undefined;
+  }
+  
+export default async function Post(
     props: PostProps) {
 
     const { id,
         author,
-        datepublished,
+        createdAt,
         thumbnail,
         authorEmail,
         title,
         content,
         links,
-        category
+        catName
     } = props
 
+    const session = await getServerSession(authOptions)
 
-    const isEditable = true;
+    const isEditable = session && session?.user?.email === authorEmail;
+
+    const dateObject = new Date(createdAt);
+
+    const options: Intl.DateTimeFormatOptions = {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      };
+      
+      const formattedDate = dateObject.toLocaleDateString("en-US", options);
+      
 
     return (
         <div className="my-4 border-b border-b-300 py-8">
             <div>
                 Posted by:
                 <span className="font-bold">
-                    {author}
+                    {author.name}
                 </span>
-                 on {datepublished}
+                 on {formattedDate}
             </div>
             <div className="w-full h-72 relative">
                 {thumbnail ? (<Image src={thumbnail} alt={title} fill
@@ -47,14 +63,14 @@ export default function Post(
                         className="object-cover rounded-md object-center" />
                 )}
             </div>
-            {category && (<Link
+            {catName && (<Link
                 className="bg-slate-800 
                  w-fit
                  text-white 
                  px-4 py-0.5 
                  text-sm font-bold
                  rounded-md mt-4 block"
-                href={`categories/${category}`}>{category}</Link>)}
+                href={`categories/${catName}`}>{catName}</Link>)}
             <h2>{title}</h2>
             <p className="content">{content}</p>
             {links && (

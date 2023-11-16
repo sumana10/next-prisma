@@ -1,5 +1,7 @@
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
+import {getServerSession} from "next-auth/next";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function GET(
     req: Request,
@@ -18,6 +20,12 @@ export async function GET(
 
 export async function PUT( req: Request,
     {params} : {params: {id: string}}){
+
+    const session = await getServerSession(authOptions);
+
+    if(!session){
+        return NextResponse.json({message:"Unauthorized"},{status: 401});
+    }
 
     const {title, content, links, selectedCategory, imageUrl, publicId} = await req.json();
 
@@ -49,6 +57,13 @@ export async function PUT( req: Request,
 
 export async function DELETE(req: Request,
     {params} : {params: {id: string}}){
+
+      const session = await getServerSession(authOptions);
+
+      if(!session){
+          return NextResponse.json({message:"Unauthorized"},{status: 401});
+      }
+
         const id = params.id;
 
         try{
