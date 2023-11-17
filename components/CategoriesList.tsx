@@ -1,7 +1,6 @@
 import { categoriesData } from "@/data";
 import React from 'react'
 import Link from "next/link";
-
 import { TCategory } from "@/app/types";
 
 const getCategories = async (): Promise<TCategory[] | null> =>{
@@ -18,6 +17,7 @@ const getCategories = async (): Promise<TCategory[] | null> =>{
   }catch(error){
     console.log('Error:', error);
   }
+  
   return null;
 
 }

@@ -6,9 +6,7 @@ import { TPost } from './types'
 
 const getPosts = async ():Promise<TPost[] | null> =>{
   try {
-
     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/posts`, {cache: "no-store",})
-
     if(res.ok){
       const posts = await res.json();
       return posts;
@@ -23,6 +21,7 @@ const getPosts = async ():Promise<TPost[] | null> =>{
 export default async function Home() {
 
  const posts = await getPosts();
+  console.log('posts', posts);
 
   return (
     <div>

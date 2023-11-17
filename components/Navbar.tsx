@@ -31,7 +31,7 @@ const Navbar = () => {
             }`}>
               <div className='font-bold'>{session?.user?.name}</div>
               <div>{session?.user?.email}</div>
-              <Link className="hover:underline" href={"/dashbord"}>Dashboard</Link>
+              <Link className="hover:underline" href={"/dashboard"}>Dashboard</Link>
               <Link className="hover:underline" href={"/create-post"}>Create Post</Link>
               <button onClick={() => signOut()} className='btn'>Sign out</button>
             </div>

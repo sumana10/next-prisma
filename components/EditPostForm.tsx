@@ -1,11 +1,11 @@
 "use client"
-import { TCategory } from "@/app/types";
+import { TCategory, TPost } from "@/app/types";
 import { categoriesData } from "@/data"
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-export default function CreatePostForm() {
+export default function EditPostForm({post}:{post: TPost}) {
 
     const [links, setLinks] = useState<string[]>([]);
     const [linkInput, setLinkInput] = useState("");

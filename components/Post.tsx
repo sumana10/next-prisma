@@ -7,7 +7,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 interface PostProps {
     id: string;
     author: {
-      name: string;
+      name: string | undefined;
     };
     createdAt: string;
     thumbnail?: string;
@@ -32,6 +32,8 @@ export default async function Post(
         catName
     } = props
 
+   // console.log(props);
+
     const session = await getServerSession(authOptions)
 
     const isEditable = session && session?.user?.email === authorEmail;
@@ -50,11 +52,17 @@ export default async function Post(
     return (
         <div className="my-4 border-b border-b-300 py-8">
             <div>
-                Posted by:
+                {author ? (<>
+                    Posted by:
                 <span className="font-bold">
                     {author.name}
                 </span>
                  on {formattedDate}
+                
+                </>): (<>
+                    Posted by:
+                 on {formattedDate}
+                </>)}
             </div>
             <div className="w-full h-72 relative">
                 {thumbnail ? (<Image src={thumbnail} alt={title} fill
@@ -91,7 +99,7 @@ export default async function Post(
                 isEditable && (
                     <div className="flex gap-3 font-bold py-2 px-4 rounded-md bg-slate-200 w-fit">
                         <Link href={`/edit-post/${id}`}>Edit</Link>
-                        <DeleteButton />
+                        <DeleteButton id={id}/>
                     </div>
                 )
             }
