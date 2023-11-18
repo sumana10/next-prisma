@@ -21,14 +21,24 @@ export default function EditPostForm({post}:{post: TPost}) {
     const router = useRouter();
 
     useEffect(()=>{
-        const fetchAllCategories = async() =>{
-            const res = await fetch('api/categories')
+        const fetchAllCategories = async () =>{
+            const res = await fetch("/api/categories")
             const catNames = await res.json();
             setCategories(catNames);
         }
 
         fetchAllCategories()
-    },[])
+
+        const initValues = () =>{
+            setTitle(post.title);
+            setContent(post.content);
+            setImageUrl(post.imageUrl || "");
+            setPublicId(post.publicId || "");
+            setSelectedCategory(post.catName || "");
+            setLinks(post.links || []);
+        }
+        initValues();
+    },[post.title, post.content, post.imageUrl, post.publicId, post.catName,  post.links])
 
 //e variable is expected to be an event object representing a mouse event on a button element
     const addLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -54,8 +64,8 @@ export default function EditPostForm({post}:{post: TPost}) {
             return;
         }
         try {
-            const res = await fetch("api/posts/", {
-              method: "POST",
+            const res = await fetch(`/api/posts/${post.id}`, {
+              method: "PUT",
               headers: {
                 "Content-type": "application/json",
               },
@@ -77,8 +87,7 @@ export default function EditPostForm({post}:{post: TPost}) {
           } catch (error) {
             // Handle errors here
             console.error("Error:", error);
-          }
-          
+          } 
 
     }
 
@@ -86,8 +95,12 @@ export default function EditPostForm({post}:{post: TPost}) {
         <div>
             <h2>Create Post</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                <input type="text" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} />
-                <textarea placeholder="Content" onChange={(e)=>setContent(e.target.value)}></textarea>
+                <input 
+                type="text" placeholder="Title" 
+                onChange={(e)=> setTitle(e.target.value)} 
+                value={title}/>
+                <textarea placeholder="Content" onChange={(e)=>setContent(e.target.value)}
+                value={content}></textarea>
                 {links && links.map((link, i) =>
                     <div key={i} className="flex item-center gap-4">
                         <Image className="cursor-pointer" src="/link-icon.svg" width={18} height={18} alt="link" />
@@ -113,7 +126,11 @@ export default function EditPostForm({post}:{post: TPost}) {
                         Add
                     </button>
                 </div>
-                <select onChange={(e)=> setSelectedCategory(e.target.value)} className="p-3 rounded-md border appearence-none">
+                <select 
+                onChange={(e)=> setSelectedCategory(e.target.value)} 
+                className="p-3 rounded-md border appearence-none"
+                value={selectedCategory}
+                >
                     <option value="">Select A Category</option>
                     {
                         categories && categories.map((category) => (
