@@ -58,7 +58,6 @@ export default async function Post(
                     {author.name}
                 </span>
                  on {formattedDate}
-                
                 </>): (<>
                     Posted by:
                  on {formattedDate}

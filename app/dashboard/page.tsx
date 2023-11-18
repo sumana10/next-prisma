@@ -11,7 +11,6 @@ const getPosts = async(email: string):Promise<TPost[] | null> =>{
   try{
 
     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/author/${email}`);
-
     const {posts} = await res.json();
     return posts;
 
