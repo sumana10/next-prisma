@@ -78,6 +78,7 @@ export default function CreatePostForm() {
             if (res.ok) {
                 // Rest of your code here
                 toast.success("Post created successfully")
+                router.refresh();
                 router.push('/dashboard')
             }
         } catch (error) {
@@ -111,21 +112,21 @@ export default function CreatePostForm() {
         e.preventDefault();
 
         try {
-            
-            const res = await fetch('api/removeImage',{
+
+            const res = await fetch('api/removeImage', {
                 method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({publicId})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ publicId })
             })
-    
-            if(res.ok){
+
+            if (res.ok) {
                 setImageUrl("");
                 setPublicId("")
             }
         } catch (error) {
 
             console.log(error);
-            
+
         }
     }
     return (
@@ -180,9 +181,9 @@ export default function CreatePostForm() {
                 </CldUploadButton>
 
                 {publicId &&
-                    <button onClick={removeImage} 
-                    className="py-2 px-4 rounded-md font-bold w-fit bg-red-600 text-white mb-4">
-                    Remove Image
+                    <button onClick={removeImage}
+                        className="py-2 px-4 rounded-md font-bold w-fit bg-red-600 text-white mb-4">
+                        Remove Image
                     </button>
                 }
                 <select onChange={(e) => setSelectedCategory(e.target.value)} className="p-3 rounded-md border appearence-none">

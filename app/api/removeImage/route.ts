@@ -1,5 +1,5 @@
 import cloudinary from "cloudinary";
-import {NextResponse} from "next/server"
+import { NextResponse } from "next/server"
 
 cloudinary.v2.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -7,23 +7,23 @@ cloudinary.v2.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-const removeImage = async(publicId: string) =>{
+const removeImage = async (publicId: string) => {
     try {
 
         const res = await cloudinary.v2.uploader.destroy(publicId);
 
         console.log("image removed")
-        
+
     } catch (error) {
 
         console.log(error);
-        
+
     }
 }
-export async function POST(req: Request){
+export async function POST(req: Request) {
 
     const { publicId } = await req.json();
     await removeImage(publicId);
-    
-    return NextResponse.json({message: "success"})
+
+    return NextResponse.json({ message: "success" })
 }

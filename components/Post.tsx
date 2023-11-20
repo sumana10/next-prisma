@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import DeleteButton from "./DeleteButton";
-import {getServerSession} from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface PostProps {
     id: string;
     author: {
-      name: string | undefined;
+        name: string | undefined;
     };
     createdAt: string;
     thumbnail?: string;
@@ -17,8 +17,8 @@ interface PostProps {
     content: string;
     links?: string[] | null;
     catName?: string | undefined;
-  }
-  
+}
+
 export default async function Post(
     props: PostProps) {
 
@@ -46,23 +46,23 @@ export default async function Post(
         month: "short",
         day: "numeric",
         year: "numeric",
-      };
-      
-      const formattedDate = dateObject.toLocaleDateString("en-US", options);
-      
+    };
+
+    const formattedDate = dateObject.toLocaleDateString("en-US", options);
+
 
     return (
         <div className="my-4 border-b border-b-300 py-8">
             <div>
                 {author ? (<>
                     Posted by:
-                <span className="font-bold">
-                    {author.name}
-                </span>
-                 on {formattedDate}
-                </>): (<>
+                    <span className="font-bold mx-1">
+                        {author.name}
+                    </span>
+                     on {formattedDate}
+                </>) : (<>
                     Posted by:
-                 on {formattedDate}
+                     on {formattedDate}
                 </>)}
             </div>
             <div className="w-full h-72 relative">
@@ -87,9 +87,9 @@ export default async function Post(
                     {links.map((link, i) =>
                         <div key={i} className="flex gap-2 flex-center">
                             <Image src="/link-icon.svg" alt="link" width={24}
-                            height={24}/>
-                            <Link className="link" 
-                            href={link}>
+                                height={24} />
+                            <Link className="link"
+                                href={link}>
                                 {link}
                             </Link>
                         </div>
@@ -100,7 +100,7 @@ export default async function Post(
                 isEditable && (
                     <div className="flex gap-3 font-bold py-2 px-4 rounded-md bg-slate-200 w-fit">
                         <Link href={`/edit-post/${id}`}>Edit</Link>
-                        <DeleteButton id={id}/>
+                        <DeleteButton id={id} />
                     </div>
                 )
             }

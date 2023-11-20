@@ -13,7 +13,7 @@ const getPost = async (id: string): Promise<TPost | null> => {
         })
 
         if (res.ok) {
-            
+
             const post = await res.json()
             console.log(post)
             return post;

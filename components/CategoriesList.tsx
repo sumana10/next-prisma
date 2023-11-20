@@ -3,26 +3,26 @@ import React from 'react'
 import Link from "next/link";
 import { TCategory } from "@/app/types";
 
-const getCategories = async (): Promise<TCategory[] | null> =>{
+const getCategories = async (): Promise<TCategory[] | null> => {
 
-  try{
+  try {
 
     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/categories`)
 
-    if(res.ok){
+    if (res.ok) {
       const categories = await res.json();
       return categories;
     }
 
-  }catch(error){
+  } catch (error) {
     console.log('Error:', error);
   }
-  
+
   return null;
 
 }
 
-const CategoriesList = async() => {
+const CategoriesList = async () => {
 
   const categories = await getCategories()
   return (

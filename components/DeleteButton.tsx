@@ -2,54 +2,54 @@
 "use client"
 
 import { toast } from "react-hot-toast"
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation"
 
-export default function DeleteButton({id}:{id: string}) {
+export default function DeleteButton({ id }: { id: string }) {
 
     const router = useRouter();
 
-    const deleteImage = async(publicId: string) =>{
+    const deleteImage = async (publicId: string) => {
 
-        const res = await fetch('/pi/removeImage',{
-            method:'POST',
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({public_id: publicId}),
+        const res = await fetch('/pi/removeImage', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ public_id: publicId }),
 
         })
 
     }
 
-    const handleDelete = async () =>{
+    const handleDelete = async () => {
         const confirmed = window.confirm("Are you sure you want to delete this  post?")
 
-        if(confirmed){
+        if (confirmed) {
 
             try {
 
-                const res = await fetch(`/api/posts/${id}`,{
+                const res = await fetch(`/api/posts/${id}`, {
                     method: "DELETE",
-                    headers:{
+                    headers: {
                         "Content-type": "application/json"
                     },
                 });
-                if(res.ok){
+                if (res.ok) {
                     console.log("Post deleted")
                     const post = await res.json();
-                    const {publicId} = post;
+                    const { publicId } = post;
                     await deleteImage(publicId);
                     toast.success("Post deleted successfully");
                     router.refresh();
                 }
-                
+
             } catch (error) {
                 toast.error("Something went wrong")
                 console.log(error);
-                
+
             }
 
         }
     }
-    return <button onClick={handleDelete}className="text-red-500">
+    return <button onClick={handleDelete} className="text-red-500">
         Delete
     </button>
 }

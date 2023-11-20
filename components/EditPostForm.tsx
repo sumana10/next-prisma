@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { CldUploadButton, CldUploadWidgetResults } from "next-cloudinary";
 import toast from "react-hot-toast";
 
-export default function EditPostForm({post}:{post: TPost}) {
+export default function EditPostForm({ post }: { post: TPost }) {
 
     const [links, setLinks] = useState<string[]>([]);
     const [linkInput, setLinkInput] = useState("");
@@ -24,8 +24,8 @@ export default function EditPostForm({post}:{post: TPost}) {
 
     const router = useRouter();
 
-    useEffect(()=>{
-        const fetchAllCategories = async () =>{
+    useEffect(() => {
+        const fetchAllCategories = async () => {
             const res = await fetch("/api/categories")
             const catNames = await res.json();
             setCategories(catNames);
@@ -33,7 +33,7 @@ export default function EditPostForm({post}:{post: TPost}) {
 
         fetchAllCategories()
 
-        const initValues = () =>{
+        const initValues = () => {
             setTitle(post.title);
             setContent(post.content);
             setImageUrl(post.imageUrl || "");
@@ -42,9 +42,9 @@ export default function EditPostForm({post}:{post: TPost}) {
             setLinks(post.links || []);
         }
         initValues();
-    },[post.title, post.content, post.imageUrl, post.publicId, post.catName,  post.links])
+    }, [post.title, post.content, post.imageUrl, post.publicId, post.catName, post.links])
 
-//e variable is expected to be an event object representing a mouse event on a button element
+    //e variable is expected to be an event object representing a mouse event on a button element
     const addLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         if (linkInput.trim() !== "") {
@@ -54,16 +54,16 @@ export default function EditPostForm({post}:{post: TPost}) {
     }
 
     const deleteLink = (index: number) => {
-//_: This is a convention for a variable that you don't intend to use. In this case, it's a placeholder for the value of each element in the array.
+        //_: This is a convention for a variable that you don't intend to use. In this case, it's a placeholder for the value of each element in the array.
         setLinks((prev) => prev.filter((_, i) => i !== index))
 
     }
 
-    const handleSubmit = async(e: React.FormEvent) =>{
+    const handleSubmit = async (e: React.FormEvent) => {
 
         e.preventDefault();
 
-        if(!title || !content){
+        if (!title || !content) {
             // setError("Title and content are required");
             const errorMessage = "Title and content are required";
             toast.error(errorMessage)
@@ -71,31 +71,32 @@ export default function EditPostForm({post}:{post: TPost}) {
         }
         try {
             const res = await fetch(`/api/posts/${post.id}`, {
-              method: "PUT",
-              headers: {
-                "Content-type": "application/json",
-              },
-              body: JSON.stringify({
-                title,
-                content,
-                links,
-                categories,
-                selectedCategory,
-                imageUrl,
-                publicId, // Fixed camel case
-              }),
+                method: "PUT",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    title,
+                    content,
+                    links,
+                    categories,
+                    selectedCategory,
+                    imageUrl,
+                    publicId, // Fixed camel case
+                }),
             });
-          
+
             if (res.ok) {
-              // Rest of your code here
-              toast.success("Post created successfully")
-              router.push('/dashboard')
+                // Rest of your code here
+                toast.success("Post created successfully")
+                router.refresh();
+                router.push('/dashboard')
             }
-          } catch (error) {
+        } catch (error) {
             // Handle errors here
             toast.error("Something went wrong")
             console.error("Error:", error);
-          } 
+        }
 
     }
 
@@ -121,21 +122,21 @@ export default function EditPostForm({post}:{post: TPost}) {
         e.preventDefault();
 
         try {
-            
-            const res = await fetch('/api/removeImage',{
+
+            const res = await fetch('/api/removeImage', {
                 method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({publicId})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ publicId })
             })
-    
-            if(res.ok){
+
+            if (res.ok) {
                 setImageUrl("");
                 setPublicId("")
             }
         } catch (error) {
 
             console.log(error);
-            
+
         }
     }
 
@@ -143,12 +144,12 @@ export default function EditPostForm({post}:{post: TPost}) {
         <div>
             <h2>Create Post</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                <input 
-                type="text" placeholder="Title" 
-                onChange={(e)=> setTitle(e.target.value)} 
-                value={title}/>
-                <textarea placeholder="Content" onChange={(e)=>setContent(e.target.value)}
-                value={content}></textarea>
+                <input
+                    type="text" placeholder="Title"
+                    onChange={(e) => setTitle(e.target.value)}
+                    value={title} />
+                <textarea placeholder="Content" onChange={(e) => setContent(e.target.value)}
+                    value={content}></textarea>
                 {links && links.map((link, i) =>
                     <div key={i} className="flex item-center gap-4">
                         <Image className="cursor-pointer" src="/link-icon.svg" width={18} height={18} alt="link" />
@@ -195,15 +196,15 @@ export default function EditPostForm({post}:{post: TPost}) {
                 </CldUploadButton>
 
                 {publicId &&
-                    <button onClick={removeImage} 
-                    className="py-2 px-4 rounded-md font-bold w-fit bg-red-600 text-white mb-4">
-                    Remove Image
+                    <button onClick={removeImage}
+                        className="py-2 px-4 rounded-md font-bold w-fit bg-red-600 text-white mb-4">
+                        Remove Image
                     </button>
                 }
-                <select 
-                onChange={(e)=> setSelectedCategory(e.target.value)} 
-                className="p-3 rounded-md border appearence-none"
-                value={selectedCategory}
+                <select
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="p-3 rounded-md border appearence-none"
+                    value={selectedCategory}
                 >
                     <option value="">Select A Category</option>
                     {

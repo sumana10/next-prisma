@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer className='py-3'>@Suman</footer>
+    <footer className='py-5 text-center '> &copy; Sumana</footer>
   )
 }
 

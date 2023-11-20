@@ -27,7 +27,7 @@ export default function RootLayout({
             {children}
             <Footer />
           </div>
-          <Toaster/>
+          <Toaster />
         </NextAuthProvider>
       </body>
     </html>

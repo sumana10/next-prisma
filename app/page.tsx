@@ -4,14 +4,14 @@ import Post from '@/components/Post'
 import { TPost } from './types'
 // import { postsData } from '@/data'
 
-const getPosts = async ():Promise<TPost[] | null> =>{
+const getPosts = async (): Promise<TPost[] | null> => {
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/posts`, {cache: "no-store",})
-    if(res.ok){
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/posts`, { cache: "no-store", })
+    if (res.ok) {
       const posts = await res.json();
       return posts;
     }
-    
+
   } catch (error) {
     console.log(error);
   }
@@ -20,7 +20,7 @@ const getPosts = async ():Promise<TPost[] | null> =>{
 
 export default async function Home() {
 
- const posts = await getPosts();
+  const posts = await getPosts();
   console.log('posts', posts);
 
   return (
@@ -29,7 +29,7 @@ export default async function Home() {
       {posts && posts.length > 0 ? (
         posts.map((post) =>
           <Post key={post.id}
-            {...post}/>
+            {...post} />
         )
       ) : (
         <div>No posts to display</div>

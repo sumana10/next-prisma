@@ -3,35 +3,35 @@ import Post from "@/components/Post"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
 import { TPost } from "../types"
 
-const getPosts = async(email: string):Promise<TPost[] | null> =>{
+const getPosts = async (email: string): Promise<TPost[] | null> => {
 
-  try{
+  try {
 
     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/author/${email}`);
-    const {posts} = await res.json();
+    const { posts } = await res.json();
     return posts;
 
-  }catch(error){
+  } catch (error) {
     return null;
   }
 }
 
 export default async function Dashboard() {
-  
+
   const session = await getServerSession(authOptions);
 
   const email = session?.user?.email;
 
-  let posts : TPost[] | null = [];
+  let posts: TPost[] | null = [];
 
-  if(!session){
+  if (!session) {
     redirect("/sign-in");
   }
 
-  if(email){
+  if (email) {
     posts = await getPosts(email)
   }
 
