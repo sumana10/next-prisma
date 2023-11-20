@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CldUploadButton, CldUploadWidgetResults } from "next-cloudinary";
+import { toast } from "react-hot-toast";
 
 export default function CreatePostForm() {
 
@@ -52,7 +53,9 @@ export default function CreatePostForm() {
         e.preventDefault();
 
         if (!title || !content) {
-            setError("Title and content are required");
+            // setError("Title and content are required");
+            const errorMessage = "Title and content are required";
+            toast.error(errorMessage)
             return;
         }
         try {
@@ -74,22 +77,24 @@ export default function CreatePostForm() {
 
             if (res.ok) {
                 // Rest of your code here
+                toast.success("Post created successfully")
                 router.push('/dashboard')
             }
         } catch (error) {
             // Handle errors here
+            toast.error("Something went wrong")
             console.error("Error:", error);
         }
 
 
     }
 
-    const handleImageUpload = (result: CldUploadWidgetResults) =>{
+    const handleImageUpload = (result: CldUploadWidgetResults) => {
 
         console.log(result);
         const info = result.info as object;
 
-        if("secure_url" in info && "public_id" in info){
+        if ("secure_url" in info && "public_id" in info) {
             const url = info.secure_url as string;
             const public_id = info.public_id as string;
             setImageUrl(url);
@@ -101,12 +106,27 @@ export default function CreatePostForm() {
 
     }
 
-    const removeImage = async(e:React.FormEvent) =>{
+    const removeImage = async (e: React.FormEvent) => {
 
         e.preventDefault();
 
+        try {
+            
+            const res = await fetch('api/removeImage',{
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({publicId})
+            })
+    
+            if(res.ok){
+                setImageUrl("");
+                setPublicId("")
+            }
+        } catch (error) {
 
-
+            console.log(error);
+            
+        }
     }
     return (
         <div>
@@ -139,27 +159,32 @@ export default function CreatePostForm() {
                         Add
                     </button>
                 </div>
-                <CldUploadButton uploadPreset={process.env.CLOUDINARY_UPLOAD_PRESET} 
-                className={`h-48 border-2 mt-4 border-dotted grid place-items-center bg-slate-100 rounded-md relative 
+                <CldUploadButton uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                    className={`h-48 border-2 mt-4 border-dotted grid place-items-center bg-slate-100 rounded-md relative 
                 ${imageUrl && "pointer-events-none"}`}
-                onUpload={handleImageUpload}>
+                    onUpload={handleImageUpload}>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                         </svg>
                     </div>
                     {
-                    imageUrl && 
-                    <Image 
-                    src={imageUrl} 
-                    fill 
-                    className="absolute object-cover inset-0" 
-                    alt={"title"}
-                    />
+                        imageUrl &&
+                        <Image
+                            src={imageUrl}
+                            fill
+                            className="absolute object-cover inset-0"
+                            alt={"title"}
+                        />
                     }
                 </CldUploadButton>
-                {publicId && 
-                <button onClick={removeImage} className="py-2 px-4 rounded-md font-bold w-fit bg-red-600 text-white mb-4">Remove Image</button>}
+
+                {publicId &&
+                    <button onClick={removeImage} 
+                    className="py-2 px-4 rounded-md font-bold w-fit bg-red-600 text-white mb-4">
+                    Remove Image
+                    </button>
+                }
                 <select onChange={(e) => setSelectedCategory(e.target.value)} className="p-3 rounded-md border appearence-none">
                     <option value="">Select A Category</option>
                     {
@@ -171,7 +196,7 @@ export default function CreatePostForm() {
                     }
                 </select>
                 <button className="primary-btn" type="submit">Create Post</button>
-                {error && <div className="p-2 text-red-500 font-bold">{error}</div>}
+                {/* {error && <div className="p-2 text-red-500 font-bold">{error}</div>} */}
             </form>
         </div>
     )

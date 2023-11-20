@@ -9,11 +9,21 @@ cloudinary.v2.config({
 
 const removeImage = async(publicId: string) =>{
     try {
+
+        const res = await cloudinary.v2.uploader.destroy(publicId);
+
+        console.log("image removed")
         
     } catch (error) {
+
+        console.log(error);
         
     }
 }
 export async function POST(req: Request){
+
+    const { publicId } = await req.json();
+    await removeImage(publicId);
+    
     return NextResponse.json({message: "success"})
 }

@@ -11,6 +11,7 @@ interface PostProps {
     };
     createdAt: string;
     thumbnail?: string;
+    imageUrl?: string;
     authorEmail?: string;
     title: string;
     content: string;
@@ -25,6 +26,7 @@ export default async function Post(
         author,
         createdAt,
         thumbnail,
+        imageUrl,
         authorEmail,
         title,
         content,
@@ -32,7 +34,7 @@ export default async function Post(
         catName
     } = props
 
-   // console.log(props);
+    console.log(thumbnail);
 
     const session = await getServerSession(authOptions)
 
@@ -64,7 +66,7 @@ export default async function Post(
                 </>)}
             </div>
             <div className="w-full h-72 relative">
-                {thumbnail ? (<Image src={thumbnail} alt={title} fill
+                {imageUrl ? (<Image src={imageUrl} alt={title} fill
                     className="object-cover rounded-md object-center" />) : (
                     <Image src={'/thumbnail-placeholder.png'} alt={title} fill
                         className="object-cover rounded-md object-center" />
