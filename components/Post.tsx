@@ -52,8 +52,8 @@ export default async function Post(
 
 
     return (
-        <div className="my-4 border-b border-b-300 py-8">
-            <div>
+        <div className="my-4 border-b border-b-300 py-8 ">
+            <div className="mb-2">
                 {author ? (<>
                     Posted by:
                     <span className="font-bold mx-1">
@@ -98,7 +98,7 @@ export default async function Post(
             )}
             {
                 isEditable && (
-                    <div className="flex gap-3 font-bold py-2 px-4 rounded-md bg-slate-200 w-fit">
+                    <div className="flex gap-3 font-bold py-2 px-4 rounded-md bg-slate-800 text-white  w-fit">
                         <Link href={`/edit-post/${id}`}>Edit</Link>
                         <DeleteButton id={id} />
                     </div>

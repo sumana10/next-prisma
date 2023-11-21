@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    background-color: #4e44ce4f;
+}
+.custom-bg-color {
+    background-color: #4e44ce4f;
+  }
+
 .btn {
     @apply bg-slate-200 px-4 py-2 rounded-md font-semibold hover:scale-105 transition
 }
