@@ -49,8 +49,7 @@ export default async function Post(
     };
 
     const formattedDate = dateObject.toLocaleDateString("en-US", options);
-
-
+    
     return (
         <div className="my-4 border-b border-b-300 py-8 ">
             <div className="mb-2">
